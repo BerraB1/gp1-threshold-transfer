@@ -1,24 +1,34 @@
-# Ağlar Arası Alarm Eşiği Aktarımı (GP1 – Grup 32)
+# Alarm Threshold Transfer Across Networks (OCAD-TT)
 
-Tek sınıflı ağ anomali tespitinde (Isolation Forest, otokodlayıcı) etiketsiz eşik belirleme.
-TÜBİTAK 2209-A önerisi temel alınmıştır.
+Label-free threshold setting in one-class network anomaly detection (Isolation Forest, autoencoder).
+Graduation Project 1, Ankara Science University, Department of Computer Engineering. Based on our TÜBİTAK 2209-A proposal.
 
-**Ekip:** Berra Bayındır, Ceren Torun, Aslıhan Kaçmaz
-**Danışman:** Dr. Didem Tufan
+**Team (Group 32, ABC Team):** Berra Bayındır, Ceren Torun, Aslıhan Kaçmaz
+**Advisor:** Assist. Prof. Dr. Didem Tufan
 
-## v0 senaryosu
-NF-UNSW-NB15-v2 üzerinde Isolation Forest yalnızca normal trafikle eğitilir; eşik (1−α) yüzdeliğiyle
-belirlenir; küçük bir NF-CSE-CIC-IDS2018-v2 alt örnekleminde FPR ve ihlal oranı (FPR/α) hesaplanır.
+## Problem
+One-class detectors are trained on normal traffic only and need an alarm threshold. A threshold tuned on one network can produce far more false alarms, or miss attacks, on another network where no attack labels exist. We measure how reliable such thresholds are after transfer, compare label-free ways to reset them, and compare results with finite-sample theory.
 
-## Kurulum ve çalıştırma
+## v0 scenario
+1. Train an Isolation Forest on normal flows of NF-UNSW-NB15-v2 only.
+2. Set the source threshold as the (1 − α) percentile of normal validation scores.
+3. Apply it unchanged to a small subsample of NF-CSE-CIC-IDS2018-v2.
+4. Report the false positive rate (FPR) and the violation ratio (FPR / α).
+
+## Getting started
 ```bash
-python -m venv .venv && source .venv/bin/activate
+python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-python src/theory_bound.py     # Tablo 3'ü yeniden üretir
+python src/theory_bound.py       # reproduces the theoretical bounds (Table 3 of the proposal)
 ```
-Veri setleri repoya eklenmez; `data/` altına indirilir.
+Datasets are not stored in this repository. Download them from the University of Queensland NetFlow datasets page and place them under `data/`.
 
-## Yapı
-- `src/` hazırlık, modeller, eşik yöntemleri, teorik üst sınır
-- `notebooks/` keşif ve denemeler
-- `docs/` GP1 raporu ve notlar
+## Repository structure
+- `src/` data preparation, models, threshold methods, theoretical bound script
+- `notebooks/` exploration and experiments
+- `docs/` GP1 report and notes
+- `data/` local datasets (git-ignored)
+
+## Status
+Work in progress. v0 is due in January 2027.
